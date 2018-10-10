@@ -1,0 +1,7 @@
+.vscode
+
+venv/
+**/__pycache__/**
+
+scikit-deploy/server/resources/clf.pkl
+scikit-deploy/server/resources/config.json

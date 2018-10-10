@@ -21,11 +21,12 @@ def _predict(sample):
 @app_blueprint.route('/score', methods=['GET'])
 def score_endpoint():
     sample = []
-    for v in config['variables']:
+    for v in config["inputs"]:
         p = request.args.get(v)
         if p is None:
-            return f'Missing variable in query string: {v}', 400
+            return f'Missing input in query string: {v}', 400
         sample.append(float(p))
     vec = np.array(sample).reshape(1, -1)
-    res = model.predict(vec).tolist()
-    return jsonify(dict(prediction=res))
+    res = model.predict(vec)
+    prediction = {a: b for a, b in zip(config["outputs"], res)}
+    return jsonify(dict(prediction=prediction))

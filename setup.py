@@ -10,6 +10,7 @@ setup(
     packages=["scikit_deploy"],
     install_requires=[
         'docker',
+        'numpy'
     ],
     entry_points={
         "console_scripts": ['skdeploy = scikit_deploy.main:main']

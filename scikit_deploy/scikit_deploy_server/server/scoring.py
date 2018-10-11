@@ -4,6 +4,7 @@ import pkg_resources
 import numpy as np
 import os
 from flask import Blueprint, request, jsonify
+from server.prediction import predict
 
 model = pickle.loads(pkg_resources.resource_string(
     __name__, 'resources/clf.pkl'))
@@ -11,12 +12,6 @@ config = json.loads(pkg_resources.resource_string(
     __name__, 'resources/config.json'))
 
 app_blueprint = Blueprint('app', __name__)
-
-
-def _predict(sample):
-    vec = np.array(sample).reshape(1, -1)
-    res = model.predict(vec)
-    return {a: b for a, b in zip(config["outputs"], res)}
 
 
 ROUTE = f"{config.get('url_prefix', '')}/score"
@@ -33,5 +28,5 @@ def score_endpoint():
             sample.append(float(p))
         except ValueError:
             return f"Input could not be coerced to float: {v} = {p}"
-    prediction = _predict(sample)
+    prediction = predict(model, sample, config["outputs"])
     return jsonify(dict(prediction=prediction))

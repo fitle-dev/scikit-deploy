@@ -1,10 +1,10 @@
-FROM python:3.7.0-slim
+FROM python:3.6-stretch
 
 WORKDIR /python/scikit-deploy
 
 COPY . .
 
-RUN pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt && python3 validate.py
 
 EXPOSE 5000
 

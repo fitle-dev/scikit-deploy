@@ -7,7 +7,6 @@ import os.path as osp
 import docker
 import json
 import pickle
-import numpy as np
 
 
 def prepare_workspace(temp_dir, clf_path, config_path, requirements_path):

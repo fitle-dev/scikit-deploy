@@ -2,7 +2,7 @@ import pickle
 import json
 import pkg_resources
 import numpy as np
-
+import os
 from flask import Blueprint, request, jsonify
 
 model = pickle.loads(pkg_resources.resource_string(
@@ -15,18 +15,23 @@ app_blueprint = Blueprint('app', __name__)
 
 def _predict(sample):
     vec = np.array(sample).reshape(1, -1)
-    return
+    res = model.predict(vec)
+    return {a: b for a, b in zip(config["outputs"], res)}
 
 
-@app_blueprint.route('/score', methods=['GET'])
+ROUTE = f"{config.get('url_prefix', '')}/score"
+
+
+@app_blueprint.route(ROUTE, methods=['GET'])
 def score_endpoint():
     sample = []
     for v in config["inputs"]:
         p = request.args.get(v)
         if p is None:
             return f'Missing input in query string: {v}', 400
-        sample.append(float(p))
-    vec = np.array(sample).reshape(1, -1)
-    res = model.predict(vec)
-    prediction = {a: b for a, b in zip(config["outputs"], res)}
+        try:
+            sample.append(float(p))
+        except ValueError:
+            return f"Input could not be coerced to float: {v} = {p}"
+    prediction = _predict(sample)
     return jsonify(dict(prediction=prediction))

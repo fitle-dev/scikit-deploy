@@ -3,5 +3,8 @@
 venv/
 **/__pycache__/**
 
-scikit-deploy/server/resources/clf.pkl
-scikit-deploy/server/resources/config.json
+scikit_deploy/scikit_deploy_server/server/resources/
+
+build/
+dist/
+scikit_deploy.egg-info

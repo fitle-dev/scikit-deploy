@@ -77,6 +77,12 @@ def _validate_endpoint(endpoint: str):
         raise ValueError()
 
 
+def _generate_request(config):
+    endpoint = config.get("endpoint", "/score")
+    qs = "&".join([f"{o}=0" for o in config["inputs"]])
+    return f"http://localhost:8000{endpoint}?{qs}"
+
+
 def build(clf_path, config_path, requirements_path):
     """
     Builds the docker image
@@ -96,6 +102,10 @@ def build(clf_path, config_path, requirements_path):
                                config_path, requirements_path)
             _build_docker(temp_dir, image_tag)
             logger.info("Successfully built image {}".format(image_tag))
+            logger.info("To test, run :")
+            logger.info("   docker run -p 8000:8000 {}".format(image_tag))
+            logger.info("and then perform http request")
+            logger.info("   GET {}".format(_generate_request(config)))
             status = 0
     except:
         logger.exception("Failed to build image")

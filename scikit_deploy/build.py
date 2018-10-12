@@ -79,7 +79,7 @@ def _validate_endpoint(endpoint: str):
 
 def _generate_request(config):
     endpoint = config.get("endpoint", "/score")
-    qs = "&".join([f"{o}=0" for o in config["inputs"]])
+    qs = "&".join([f"{o['name']}=0" for o in config["inputs"]])
     return f"http://localhost:8000{endpoint}?{qs}"
 
 

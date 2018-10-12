@@ -21,12 +21,20 @@ ROUTE = f"{config.get('endpoint', '/score')}"
 def score_endpoint():
     sample = []
     for v in config["inputs"]:
-        p = request.args.get(v)
+        p = request.args.get(v["name"])
         if p is None:
-            return f'Missing input in query string: {v}', 400
+            if "default" in v:
+                p = v["default"]
+            else:
+                return f'Missing input in query string: {v["name"]}', 400
         try:
             sample.append(float(p))
         except ValueError:
             return f"Input could not be coerced to float: {v} = {p}", 400
     prediction = predict(model, sample, config["outputs"])
     return jsonify(dict(prediction=prediction))
+
+
+@app_blueprint.route("/instance/health", methods=['GET'])
+def health():
+    return "healthy", 200

@@ -9,9 +9,14 @@ You can deploy any model trained with scikit-learn, or which implements the same
 
 ## Installing
 
-For now, the best way to build this is to create a wheel and install it with pip.
+There are two ways to install. First clone the repo.
 
-- Clone the repo and navigate to it
+### Install with setup.py
+
+- Run `python setup.py install --force`
+
+### Install with wheel
+
 - Install the `wheel` package : `pip install wheel`
 - Create a wheel : `pip wheel .`
 - Install the wheel: `pip install scikit-deploy-{{SOME_VERSION_NUMBER}}.whl`
@@ -48,14 +53,14 @@ Here is an example config file :
 
 Run the following command:
 
-`skdeploy /path/to/model/pickle /path/to/config.json`
+`skdeploy -m /path/to/pickled/model -c /path/to/config.json`
 
 This will run a Docker build using the image name you have provided.
 
 If your model requires extra dependencies you can specify an additional `requirements.txt` file to include
 for your server with the `-r`flag:
 
-`skdeploy /path/to/model/pickle /path/to/config.json -r /path/to/requirements.txt`
+`skdeploy -m /path/to/model -c /path/to/config -r /path/to/requirements.txt`
 
 ## Running and testing the server
 

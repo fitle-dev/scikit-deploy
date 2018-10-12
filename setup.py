@@ -19,7 +19,7 @@ setup(
     description="Scikit-learn model REST API deployment with docker",
     long_description=long_descr,
     long_description_content_type='text/markdown',
-    author="Ulysse Mizrahi",
-    author_email="ulysse.mizrahi@gmail.com",
+    author="Fitle",
+    author_email="nerds@fitle.com",
     url="https://github.com/fitle-dev/scikit-deploy"
 )

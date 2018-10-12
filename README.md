@@ -4,7 +4,8 @@ Deploy models trained with scikit-learn with Docker.
 
 ## Requirements
 
-You will require python 3 and Docker installed on your system.
+You will need python 3 and Docker installed on your system.
+You can deploy any model trained with scikit-learn, or which implements the same `predict()` method as scikit-learn models (eg. xgboost).
 
 ## Installing
 

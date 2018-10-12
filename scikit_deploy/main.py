@@ -1,8 +1,19 @@
 import argparse
+import logging 
+
 from scikit_deploy.build import build
 
-
+def _setup_logging():
+    logger = logging.getLogger('scikit-deploy')
+    logger.setLevel(logging.INFO)
+    handler = logging.StreamHandler()
+    handler.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    
 def main():
+    _setup_logging()
     parser = argparse.ArgumentParser(
         description="Deploy scikit models as a REST API using Docker")
     parser.add_argument('clf_path',

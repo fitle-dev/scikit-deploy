@@ -68,14 +68,12 @@ def _build_docker(temp_dir, image_tag):
         raise
 
 
-def _validate_url_prefix(url_prefix: str):
-    if not url_prefix:
-        return
-    if not url_prefix.startswith("/"):
-        logger.error("url_prefix must begin with a / or be empty.")
+def _validate_endpoint(endpoint: str):
+    if not endpoint.startswith("/"):
+        logger.error("endpoint must begin with a /")
         raise ValueError()
-    if url_prefix.endswith("/"):
-        logger.error("url_prefix cannot end with a /")
+    if endpoint.endswith("/"):
+        logger.error("endpoint cannot end with a /")
         raise ValueError()
 
 
@@ -92,7 +90,8 @@ def build(clf_path, config_path, requirements_path):
             if image_tag is None:
                 logger.error("No image_tag specified in config")
                 exit(1)
-            _validate_url_prefix(config.get("url_prefix", ""))
+            if "endpoint" in config:
+                _validate_endpoint(config["endpoint"])
             _prepare_workspace(temp_dir, clf_path,
                                config_path, requirements_path)
             _build_docker(temp_dir, image_tag)

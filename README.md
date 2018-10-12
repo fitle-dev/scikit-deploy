@@ -26,7 +26,8 @@ It takes the following form:
 ```
 {
     "image_tag": "{{the tag given to the generated docker image}}",
-    "url_prefix": "{{optional, a prefix to give to the scoring endpoint}}",
+    "endpoint": "{{the endpoint to call for scoring. Defaults to 'score'}}",
+    "cors": "{{boolean, whether to add CORS to the endpoint. Defaults to false.}}"
     "inputs": [{{the names of the input features}}],
     "outputs": [{{the names of the output targets}}]
 }
@@ -37,7 +38,7 @@ Here is an example config file :
 ```
 {
     "image_tag": "my_super_model:latest",
-    "url_prefix": "/v1",
+    "endpoint": "/super-score",
     "inputs": ["x", "y"],
     "outputs": ["z"]
 }
@@ -65,7 +66,7 @@ To test your server on local port 8080 for example, run it using docker:
 
 And you can start querying the server ; for the config file above, this would be done as :
 
-`GET localhost:8000/v1/score?x=1337&y=42`
+`GET localhost:8080/super-score?x=1337&y=42`
 
 Which would yield the json
 

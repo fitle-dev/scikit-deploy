@@ -8,8 +8,12 @@ You will require python 3 and Docker installed on your system.
 
 ## Installing
 
-For now, clone the repo and run `python setup.py install`.
-This will install the `skdeploy` CLI.
+For now, the best way to build this is to create a wheel and install it with pip.
+
+- Clone the repo and navigate to it
+- Install the `wheel` package : `pip install wheel`
+- Create a wheel : `pip wheel .`
+- Install the wheel: `pip install scikit-deploy-{{SOME_VERSION_NUMBER}}.whl`
 
 ## Configuration
 
@@ -45,6 +49,11 @@ Run the following command:
 `skdeploy /path/to/model/pickle /path/to/config.json`
 
 This will run a Docker build using the image name you have provided.
+
+If your model requires extra dependencies you can specify an additional `requirements.txt` file to include
+for your server with the `-r`flag:
+
+`skdeploy /path/to/model/pickle /path/to/config.json -r /path/to/requirements.txt`
 
 ## Running and testing the server
 

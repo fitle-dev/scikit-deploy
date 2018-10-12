@@ -8,3 +8,7 @@ scikit_deploy/scikit_deploy_server/server/resources/
 build/
 dist/
 scikit_deploy.egg-info
+
+*.whl
+
+sample/

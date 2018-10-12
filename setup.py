@@ -1,5 +1,5 @@
 import re
-from setuptools import setup
+from setuptools import setup, find_packages
 
 with open("README.md", "rb") as f:
     long_descr = f.read().decode("utf-8")
@@ -7,7 +7,8 @@ with open("README.md", "rb") as f:
 
 setup(
     name="scikit-deploy",
-    packages=["scikit_deploy"],
+    packages=find_packages(),
+    include_package_data=True,
     install_requires=[
         'docker',
     ],
@@ -17,7 +18,8 @@ setup(
     version="1.1",
     description="Scikit-learn model REST API deployment with docker",
     long_description=long_descr,
+    long_description_content_type='text/markdown',
     author="Ulysse Mizrahi",
     author_email="ulysse.mizrahi@gmail.com",
-    url="https://github.com/odusseys/scikit-deploy",
+    url="https://github.com/fitle-dev/scikit-deploy"
 )

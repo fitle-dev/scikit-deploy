@@ -33,8 +33,8 @@ It takes the following form:
     "image_tag": "{{the tag given to the generated docker image}}",
     "endpoint": "{{the endpoint to call for scoring. Defaults to 'score'}}",
     "cors": "{{boolean, whether to add CORS to the endpoint. Defaults to false.}}"
-    "inputs": [{{the input features, objects with "name" and optional "default" fields }}],
-    "outputs": [{{the names of the output targets}}]
+    "inputs": [{{the input features, objects with "name" and optional fields "default", "offset" and "scaling" }}],
+    "outputs": [{{the output targets, objects with "name" and optional fields "offset" and "scaling"}}]
 }
 ```
 
@@ -45,7 +45,7 @@ Here is an example config file :
     "image_tag": "my_super_model:latest",
     "endpoint": "/super-score",
     "inputs": [{"name": "x"}, {"name": "y", "default": 1.551}],
-    "outputs": ["z"]
+    "outputs": [{"name": "z"}]
 }
 ```
 
@@ -80,5 +80,25 @@ Which would yield the json
     "prediction": {
         "z": 11525
     }
+}
+```
+
+You can also send a `POST` request to the endpoint. In this case, the body must be a JSON array of the inputs. Using the `POST` method, you can ask the server for several predictions in one request. For example:
+
+```
+[
+    {"x": 1337, "y": 115.16},
+    {"x": 2664, "y": 98.3},
+]
+```
+
+Which would yield
+
+```
+{
+    "prediction": [
+        {"z": 11525},
+        {"z": 3457}
+    ]
 }
 ```

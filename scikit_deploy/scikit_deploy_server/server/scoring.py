@@ -5,15 +5,17 @@ import numpy as np
 import os
 from flask import Blueprint, request, jsonify
 from server.prediction import predict
-from server.config import config
+from server.config import Config
 from server.logging import get_logger
 from server.util import APIError
 from collections import Iterable
 
 LOGGER = get_logger(__name__)
 
+config = Config()
+
 LOGGER.info("Started server with config")
-LOGGER.info(json.dumps(config))
+LOGGER.info(json.dumps(config._config))
 
 model = pickle.loads(pkg_resources.resource_string(
     __name__, 'resources/clf.pkl'))
@@ -25,10 +27,9 @@ app_blueprint = Blueprint('app', __name__)
 def score_endpoint():
     LOGGER.info("Received scoring request")
     try:
-        sample = config.process_input(request.args)
+        prediction = predict(model, request.args, config)
     except APIError as e:
         return e.message, 400
-    prediction = predict(model, sample, config)
     LOGGER.info("Successful prediction")
     return jsonify(dict(prediction=prediction))
 
@@ -39,8 +40,11 @@ def score_multiple_endpoint():
     data = request.get_json()
     if not isinstance(data, Iterable):
         return "Body should be a json array of parameters", 400
-    res = [dict(prediction=predict(model, config.process_input(x), config))
-           for x in data]
+    try:
+        res = [dict(prediction=predict(model, x, config))
+               for x in data]
+    except APIError as e:
+        return e.message, 400
     return jsonify(res)
 
 

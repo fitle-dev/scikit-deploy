@@ -1,15 +1,10 @@
 import numpy as np
 
 
-def _float(x):
-    if type(x) == float:
-        return x
-    return x.item()  # numpy floats
-
-
-def predict(model, sample, outputs):
+def predict(model, input_data, config):
+    sample = config.process_input(input_data)
     vec = np.array(sample).reshape(1, -1)
     res = model.predict(vec)
-    if len(outputs) == 1:
-        return {outputs[0]: _float(res[0])}
-    return {a: _float(b) for a, b in zip(outputs, res[0])}
+    if len(config.outputs) == 1:
+        return {config.outputs[0]['name']: config.process_output(res[0])}
+    return {a['name']: config.process_output(b) for a, b in zip(config.outputs, res[0])}

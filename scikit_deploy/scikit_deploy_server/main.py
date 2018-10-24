@@ -1,7 +1,5 @@
 from flask import Flask
-from flask_cors import CORS
 from server.scoring import app_blueprint
-from server.config import config
 
 SERVER_PORT = 5000
 
@@ -9,8 +7,6 @@ SERVER_PORT = 5000
 def get_app():
     app = Flask(__name__)
     app.register_blueprint(app_blueprint)
-    if config.get("cors", False):
-        CORS(app)
     return app
 
 

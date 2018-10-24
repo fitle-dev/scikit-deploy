@@ -38,14 +38,17 @@ It takes the following form:
 }
 ```
 
+For inputs, the offset will be substracted to the value and then the difference will be divided by the scaling. For outputs, the offset will be added to the value and the sum will be multiplied by the scaling.
+Offset and scaling values are typically used to normalize and denormalize the inputs and outputs respectively.
+
 Here is an example config file :
 
 ```
 {
     "image_tag": "my_super_model:latest",
     "endpoint": "/super-score",
-    "inputs": [{"name": "x"}, {"name": "y", "default": 1.551}],
-    "outputs": [{"name": "z"}]
+    "inputs": [{"name": "x"}, {"name": "y", "default": 1.551, "offset": 50, "scaling": 2}],
+    "outputs": [{"name": "z", "offset": 3, "scaling": 1.4}]
 }
 ```
 

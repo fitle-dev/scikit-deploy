@@ -47,4 +47,4 @@ class Config:
     def process_output(self, results):
         if len(self.outputs) == 1:
             return {self.outputs[0]['name']: self._denormalize_output(results, self.outputs[0])}
-        return {a['name']: self._denormalize_output(b, a) for a, b in zip(self.outputs, results[0])}
+        return {b['name']: self._denormalize_output(a, b) for a, b in zip(results[0], self.outputs)}

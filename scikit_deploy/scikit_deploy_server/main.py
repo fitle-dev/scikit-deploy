@@ -1,7 +1,8 @@
 from flask import Flask
 from server.scoring import app_blueprint
+import os
 
-SERVER_PORT = 5000
+SERVER_PORT = int(os.environ.get('SERVER_PORT', 5000))
 
 
 def get_app():

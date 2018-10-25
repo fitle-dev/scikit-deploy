@@ -15,7 +15,7 @@ setup(
     entry_points={
         "console_scripts": ['skdeploy = scikit_deploy.main:main']
     },
-    version="1.1",
+    version="1.2",
     description="Scikit-learn model REST API deployment with docker",
     long_description=long_descr,
     long_description_content_type='text/markdown',

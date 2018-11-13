@@ -51,3 +51,8 @@ def score_multiple_endpoint():
 @app_blueprint.route("/instance/health", methods=['GET'])
 def health():
     return "healthy", 200
+
+
+@app_blueprint.route("/config", methods=['GET'])
+def config_endpoint():
+    return jsonify(config.config_data), 200

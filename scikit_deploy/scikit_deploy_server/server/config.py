@@ -13,7 +13,7 @@ class Config:
         if not config_data:
             config_data = json.loads(pkg_resources.resource_string(
                 __name__, 'resources/config.json'))
-        self._config = config_data
+        self.config_data = config_data
         self.route = f"{config_data.get('endpoint', '/score')}"
         self.inputs = config_data["inputs"]
         self.outputs = config_data["outputs"]

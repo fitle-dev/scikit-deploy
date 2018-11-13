@@ -9,17 +9,7 @@ You can deploy any model trained with scikit-learn, or which implements the same
 
 ## Installing
 
-There are two ways to install. First clone the repo.
-
-### Install with setup.py
-
-- Run `python setup.py install --force`
-
-### Install with wheel
-
-- Install the `wheel` package : `pip install wheel`
-- Create a wheel : `pip wheel .`
-- Install the wheel: `pip install scikit-deploy-{{SOME_VERSION_NUMBER}}.whl`
+`pip install scikit-deploy`
 
 ## Configuration
 

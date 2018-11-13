@@ -1,1 +1,2 @@
 recursive-include scikit_deploy *
+include README.md

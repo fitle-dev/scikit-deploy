@@ -1,5 +1,6 @@
 import argparse
 import logging
+from scikit_deploy import __version__
 
 from scikit_deploy.build import build
 
@@ -15,10 +16,14 @@ def _setup_logging():
     logger.addHandler(handler)
 
 
-def main():
+def main(args_array=None):
     _setup_logging()
     parser = argparse.ArgumentParser(
+        prog='skdeploy',
         description="Deploy scikit models as a REST API using Docker")
+
+    parser.add_argument('-v', '--version', action='version',
+                        version='%(prog)s {version}'.format(version=__version__))
 
     parser.add_argument(
         '-m',
@@ -44,7 +49,7 @@ def main():
         nargs=1,
     )
 
-    args = parser.parse_args()
+    args = parser.parse_args(args_array)
     requirements_path = args.requirements_path
     if requirements_path is not None:
         requirements_path = requirements_path[0]

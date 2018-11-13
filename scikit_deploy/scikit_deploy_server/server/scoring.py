@@ -15,7 +15,7 @@ LOGGER = get_logger(__name__)
 config = Config()
 
 LOGGER.info("Started server with config")
-LOGGER.info(json.dumps(config._config))
+LOGGER.info(json.dumps(config.config_data))
 
 model = pickle.loads(pkg_resources.resource_string(
     __name__, 'resources/clf.pkl'))

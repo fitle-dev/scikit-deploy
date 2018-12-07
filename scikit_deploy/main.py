@@ -26,14 +26,6 @@ def main(args_array=None):
                         version='%(prog)s {version}'.format(version=__version__))
 
     parser.add_argument(
-        '-m',
-        dest='model_path',
-        help="The path to your pickled scikit model.",
-        nargs=1,
-        required=True
-    )
-
-    parser.add_argument(
         '-c',
         dest='config_path',
         help="The path to the scikit-deploy config.json (see documentation).",
@@ -53,4 +45,4 @@ def main(args_array=None):
     requirements_path = args.requirements_path
     if requirements_path is not None:
         requirements_path = requirements_path[0]
-    build(args.model_path[0], args.config_path[0], requirements_path)
+    build(args.config_path[0], requirements_path)

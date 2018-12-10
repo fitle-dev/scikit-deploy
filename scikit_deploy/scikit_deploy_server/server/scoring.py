@@ -17,34 +17,50 @@ config = Config()
 LOGGER.info("Started server with config")
 LOGGER.info(json.dumps(config.config_data))
 
-model = pickle.loads(pkg_resources.resource_string(
-    __name__, 'resources/clf.pkl'))
+models = {}
+endpoints_config = {}
+for endpoint in config.endpoints:
+    # We remove the leading /
+    route_key = endpoint.route[1:]
+    models[route_key] = pickle.loads(pkg_resources.resource_string(
+        __name__, f'resources/{endpoint.model_name}'))
+    endpoints_config[route_key] = endpoint
+
+print(models.keys())
 
 app_blueprint = Blueprint('app', __name__)
 
 
-@app_blueprint.route(config.route, methods=['GET'])
-def score_endpoint():
-    LOGGER.info("Received scoring request")
+@app_blueprint.route('/<route>', methods=['GET'])
+def index_endpoint(route):
     try:
-        prediction = predict(model, request.args, config)
+        model = models.get(route)
+        endpoint_config = endpoints_config.get(route)
+        if not model:
+            raise APIError('Not found', 404)
+        LOGGER.info("Received scoring request")
+        prediction = predict(model, request.args, endpoint_config)
     except APIError as e:
-        return e.message, 400
+        return e.message, e.status_code
     LOGGER.info("Successful prediction")
     return jsonify(dict(prediction=prediction))
 
 
-@app_blueprint.route(config.route, methods=['POST'])
-def score_multiple_endpoint():
-    LOGGER.info('Received scoring request for multiple samples')
-    data = request.get_json()
-    if not isinstance(data, Iterable):
-        return "Body should be a json array of parameters", 400
+@app_blueprint.route('/<route>', methods=['POST'])
+def score_multiple_endpoint(route):
     try:
-        res = [dict(prediction=predict(model, x, config))
+        model = models.get(route)
+        endpoint_config = endpoints_config.get(route)
+        if not model:
+            raise APIError('Not found', 404)
+        LOGGER.info('Received scoring request for multiple samples')
+        data = request.get_json()
+        if not isinstance(data, Iterable):
+            return "Body should be a json array of parameters", 400
+        res = [dict(prediction=predict(model, x, endpoint_config))
                for x in data]
     except APIError as e:
-        return e.message, 400
+        return e.message, e.status_code
     return jsonify(res)
 
 

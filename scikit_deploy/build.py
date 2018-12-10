@@ -27,7 +27,7 @@ def _prepare_requirements(temp_dir, requirements_path):
         f.write(reqs)
 
 
-def _prepare_workspace(temp_dir, clf_path, config_path, requirements_path):
+def _prepare_workspace(temp_dir, config, requirements_path):
     """
     Prepares the temporary workspace directory for the docker build
     """
@@ -37,8 +37,10 @@ def _prepare_workspace(temp_dir, clf_path, config_path, requirements_path):
 
     # copy resources (clf, config) to the workspace server resources
     resources_folder = osp.join(temp_dir, "workspace", "server", "resources")
-    shutil.copy(clf_path, osp.join(resources_folder, "clf.pkl"))
-    shutil.copy(config_path, osp.join(resources_folder, "config.json"))
+    json.dump(config, open(osp.join(resources_folder, "config.json"), 'w'))
+    for endpoint in config['endpoints']:
+        shutil.copy(endpoint['model_path'], osp.join(
+            resources_folder, endpoint['model_name']))
     if requirements_path is not None:
         _prepare_requirements(temp_dir, requirements_path)
 
@@ -68,22 +70,23 @@ def _build_docker(temp_dir, image_tag):
         raise
 
 
-def _validate_endpoint(endpoint: str):
-    if not endpoint.startswith("/"):
-        logger.error("endpoint must begin with a /")
+def _validate_route(route: str):
+    if not route.startswith("/"):
+        logger.error("route must begin with a /")
         raise ValueError()
-    if endpoint.endswith("/"):
-        logger.error("endpoint cannot end with a /")
+    if route.endswith("/"):
+        logger.error("route cannot end with a /")
         raise ValueError()
 
 
 def _generate_request(config):
-    endpoint = config.get("endpoint", "/score")
-    qs = "&".join([f"{o['name']}=0" for o in config["inputs"]])
-    return f"http://localhost:8000{endpoint}?{qs}"
+    endpoint = config['endpoints'][0]
+    route = endpoint['route']
+    qs = "&".join([f"{o['name']}=0" for o in endpoint["inputs"]])
+    return f"http://localhost:8000{route}?{qs}"
 
 
-def build(clf_path, config_path, requirements_path):
+def build(config_path, requirements_path):
     """
     Builds the docker image
     """
@@ -96,16 +99,20 @@ def build(clf_path, config_path, requirements_path):
             if image_tag is None:
                 logger.error("No image_tag specified in config")
                 exit(1)
-            if "endpoint" in config:
-                _validate_endpoint(config["endpoint"])
-            _prepare_workspace(temp_dir, clf_path,
-                               config_path, requirements_path)
+            if "endpoints" not in config:
+                logger.error("No endpoints specified in config")
+                exit(1)
+            for endpoint in config["endpoints"]:
+                _validate_route(endpoint.get('route'))
+                endpoint['model_name'] = endpoint['route'].replace(
+                    '/', '_') + '_clf.pkl'
+            _prepare_workspace(temp_dir, config, requirements_path)
             _build_docker(temp_dir, image_tag)
-            logger.info("Successfully built image {}".format(image_tag))
+            logger.info(f"Successfully built image {image_tag}")
             logger.info("To test, run :")
-            logger.info("   docker run -p 8000:8000 {}".format(image_tag))
+            logger.info(f"   docker run -p 8000:8000 {image_tag}")
             logger.info("and then perform http request")
-            logger.info("   GET {}".format(_generate_request(config)))
+            logger.info(f"   GET {_generate_request(config)}")
             status = 0
     except:
         logger.exception("Failed to build image")

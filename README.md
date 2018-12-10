@@ -21,8 +21,16 @@ It takes the following form:
 ```
 {
     "image_tag": "{{the tag given to the generated docker image}}",
-    "endpoint": "{{the endpoint to call for scoring. Defaults to 'score'}}",
-    "cors": "{{boolean, whether to add CORS to the endpoint. Defaults to false.}}"
+    "endpoints": ["{{the endpoints to call for scoring}}"],
+}
+```
+
+Endpoints have the following format:
+
+```
+{
+    "route": "{{the HTTP route to call for scoring}}",
+    "model_path": "{{model absolute path}}",
     "inputs": [{{the input features, objects with "name" and optional fields "default", "offset" and "scaling" }}],
     "outputs": [{{the output targets, objects with "name" and optional fields "offset" and "scaling"}}]
 }
@@ -36,9 +44,15 @@ Here is an example config file :
 ```
 {
     "image_tag": "my_super_model:latest",
-    "endpoint": "/super-score",
-    "inputs": [{"name": "x"}, {"name": "y", "default": 1.551, "offset": 50, "scaling": 2}],
-    "outputs": [{"name": "z", "offset": 3, "scaling": 1.4}]
+    "endpoints": [
+        {
+            "route": "/super-score",
+            "model_path": "/home/toto/model.pkl",
+            "inputs": [{"name": "x"}, {"name": "y", "default": 1.551, "offset": 50, "scaling": 2}],
+            "outputs": [{"name": "z", "offset": 3, "scaling": 1.4}]
+        }
+    ],
+
 }
 ```
 
@@ -46,14 +60,14 @@ Here is an example config file :
 
 Run the following command:
 
-`skdeploy -m /path/to/pickled/model -c /path/to/config.json`
+`skdeploy -c /path/to/config.json`
 
 This will run a Docker build using the image name you have provided.
 
-If your model requires extra dependencies you can specify an additional `requirements.txt` file to include
+If your models require extra dependencies, you can specify an additional `requirements.txt` file to include
 for your server with the `-r`flag:
 
-`skdeploy -m /path/to/model -c /path/to/config -r /path/to/requirements.txt`
+`skdeploy -c /path/to/config -r /path/to/requirements.txt`
 
 ## Running and testing the server
 

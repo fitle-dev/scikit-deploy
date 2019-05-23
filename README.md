@@ -69,6 +69,11 @@ for your server with the `-r`flag:
 
 `skdeploy -c /path/to/config -r /path/to/requirements.txt`
 
+If you need to specify a SSH private key in case your requirements are part of a private repository, use the `-k` flag:
+
+`skdeploy -c /path/to/config -r /path/to/requirements.txt -k "$(cat /path/to/private_key)"`
+
+
 ## Running and testing the server
 
 The server running inside the Docker container listens on port 5000.

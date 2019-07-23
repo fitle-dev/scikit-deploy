@@ -38,7 +38,7 @@ class Endpoint:
                 else:
                     message = f'Missing input in query string: {input_info["name"]}'
                     LOGGER.error(message)
-                    raise APIError(message)
+                    raise APIError(message, 400)
             sample.append(self._normalize_input(value, input_info))
         return sample
 

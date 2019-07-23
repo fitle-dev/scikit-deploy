@@ -55,7 +55,7 @@ def main(args_array=None):
     )
     args = parser.parse_args(args_array)
     requirements_path = args.requirements_path
-    ssh_key = args.ssh_key[0] if hasattr(args, "ssh_key") else None
+    ssh_key = args.ssh_key[0] if hasattr(args, "ssh_key") and args.ssh_key is not None else None
     if requirements_path is not None:
         requirements_path = requirements_path[0]
     build(args.config_path[0], requirements_path, ssh_key)

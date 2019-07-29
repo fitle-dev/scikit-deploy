@@ -77,9 +77,12 @@ def _build_docker(temp_dir, image_tag, ssh_key: Optional[str] = None):
             for line in logs:
                 if line:
                     line = json.loads(line)
+                    # Show only relevant outputs
                     if "stream" in line:
                         logger.info("(DOCKER) - {}".format(line["stream"]))
-    except docker.errors.BuildError as e:
+                    if "errorDetail" in line:
+                        logger.error("(DOCKER) - {}".format(line["errorDetail"]))
+    except (docker.errors.BuildError, docker.errors.APIError) as e:
         logger.error("Docker build failed with logs: ")
         for l in e.build_log:
             logger.error(l)

@@ -2,8 +2,8 @@ from setuptools import setup, find_packages
 import re
 import io
 
-with open("README.md", "rb") as f:
-    long_descr = f.read().decode("utf-8")
+with open("README.md", "r") as f:
+    long_descr = f.read()
 
 __version__ = re.search(
     r'__version__\s*=\s*[\'"]([^\'"]*)[\'"]',  # It excludes inline comment too

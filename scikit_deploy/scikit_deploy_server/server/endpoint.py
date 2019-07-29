@@ -32,13 +32,6 @@ class Endpoint:
         sample = []
         for input_info in self.inputs:
             value = data.get(input_info["name"])
-            if value is None:
-                if "default" in input_info:
-                    value = input_info["default"]
-                else:
-                    message = f'Missing input in query string: {input_info["name"]}'
-                    LOGGER.error(message)
-                    raise APIError(message, 400)
             sample.append(self._normalize_input(value, input_info))
         return sample
 

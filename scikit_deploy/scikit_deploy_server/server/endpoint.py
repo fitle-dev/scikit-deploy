@@ -32,7 +32,10 @@ class Endpoint:
         sample = []
         for input_info in self.inputs:
             value = data.get(input_info["name"])
-            sample.append(self._normalize_input(value, input_info))
+            if value is not None:
+                sample.append(self._normalize_input(value, input_info))
+            else:
+                sample.append(0.0)
         return sample
 
     def process_output(self, results):

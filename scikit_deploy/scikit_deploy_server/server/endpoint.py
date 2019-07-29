@@ -21,7 +21,7 @@ class Endpoint:
         except ValueError:
             message = f"Input could not be coerced to float: {input_info} = {value}"
             LOGGER.error(message)
-            raise APIError(message)
+            raise APIError(message, 400)
 
     def _denormalize_output(self, value: Union[float, np.float], output_info: dict):
         return (to_float(value) * output_info.get("scaling", 1)) + output_info.get(

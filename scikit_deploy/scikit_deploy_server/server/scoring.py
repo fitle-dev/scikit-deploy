@@ -26,13 +26,11 @@ for endpoint in config.endpoints:
         __name__, f'resources/{endpoint.model_name}'))
     endpoints_config[route_key] = endpoint
 
-print(models.keys())
-
 app_blueprint = Blueprint('app', __name__)
 
 
 @app_blueprint.route('/<route>', methods=['GET'])
-def index_endpoint(route):
+def index_endpoint(route:str):
     try:
         model = models.get(route)
         endpoint_config = endpoints_config.get(route)
@@ -47,7 +45,7 @@ def index_endpoint(route):
 
 
 @app_blueprint.route('/<route>', methods=['POST'])
-def score_multiple_endpoint(route):
+def score_multiple_endpoint(route:str):
     try:
         model = models.get(route)
         endpoint_config = endpoints_config.get(route)

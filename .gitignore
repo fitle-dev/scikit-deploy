@@ -1,4 +1,6 @@
 .vscode
+.elasticbeanstalk
+.mypy_cache
 
 venv/
 **/__pycache__/**

@@ -26,8 +26,6 @@ for endpoint in config.endpoints:
         __name__, f'resources/{endpoint.model_name}'))
     endpoints_config[route_key] = endpoint
 
-print(models.keys())
-
 app_blueprint = Blueprint('app', __name__)
 
 

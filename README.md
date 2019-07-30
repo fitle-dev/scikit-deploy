@@ -108,9 +108,9 @@ Which would yield
 
 ```
 {
-    "prediction": [
-        {"z": 11525},
-        {"z": 3457}
+    [
+        {"prediction": {"z": 11525}},
+        {"prediction": {"z": 3457}}
     ]
 }
 ```

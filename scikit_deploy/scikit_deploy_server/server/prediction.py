@@ -11,7 +11,7 @@ def predict(model, input_data:Union[Dict, ImmutableMultiDict], config:Endpoint):
     if hasattr(model, "public_inputs"):
         sample = {k: float(v) for k,v in dict(input_data).items()}
         res = model.predict(sample, "raw")
-        return res.to_dict("records")
+        return res.to_dict("records")[0]
     sample = config.process_input(input_data)
     vec = np.array(sample).reshape(1, -1)
     res = model.predict(vec)

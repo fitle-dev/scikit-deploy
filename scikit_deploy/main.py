@@ -49,7 +49,7 @@ def main(args_array=None):
     parser.add_argument(
         "-k",
         dest="ssh_key",
-        help="(optional) ssh key if your model dependencies uses private modules.",
+        help="(optional) ssh key if your model dependencies use private modules.",
         default=None,
         nargs=1,
     )
